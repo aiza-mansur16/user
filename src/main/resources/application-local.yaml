@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: user
+  jpa:
+    generate-ddl: true
+server:
+  port: 8080

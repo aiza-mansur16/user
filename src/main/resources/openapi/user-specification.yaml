@@ -1,0 +1,283 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:58435
+  description: Generated server url
+paths:
+  /api/users/{id}:
+    get:
+      tags:
+      - user-controller
+      summary: Get user by ID
+      description: Get user by ID
+      operationId: getUserById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: User found successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+        "404":
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+    put:
+      tags:
+      - user-controller
+      summary: Update user by ID
+      description: Update user by ID
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreateUpdateDto"
+        required: true
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+        "404":
+          description: User not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+        "400":
+          description: Invalid Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+  /api/users:
+    get:
+      tags:
+      - user-controller
+      summary: Get all users
+      description: Get all users
+      operationId: getAllUsers
+      parameters:
+      - name: userQueryDto
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserQueryDto"
+      responses:
+        "200":
+          description: Users found successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+    post:
+      tags:
+      - user-controller
+      summary: Create a new user
+      description: Create a new user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreateUpdateDto"
+        required: true
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+        "400":
+          description: Invalid Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResponseEnvelope"
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          description: status code of the error
+          enum:
+          - 100 CONTINUE
+          - 101 SWITCHING_PROTOCOLS
+          - 102 PROCESSING
+          - 103 EARLY_HINTS
+          - 103 CHECKPOINT
+          - 200 OK
+          - 201 CREATED
+          - 202 ACCEPTED
+          - 203 NON_AUTHORITATIVE_INFORMATION
+          - 204 NO_CONTENT
+          - 205 RESET_CONTENT
+          - 206 PARTIAL_CONTENT
+          - 207 MULTI_STATUS
+          - 208 ALREADY_REPORTED
+          - 226 IM_USED
+          - 300 MULTIPLE_CHOICES
+          - 301 MOVED_PERMANENTLY
+          - 302 FOUND
+          - 302 MOVED_TEMPORARILY
+          - 303 SEE_OTHER
+          - 304 NOT_MODIFIED
+          - 305 USE_PROXY
+          - 307 TEMPORARY_REDIRECT
+          - 308 PERMANENT_REDIRECT
+          - 400 BAD_REQUEST
+          - 401 UNAUTHORIZED
+          - 402 PAYMENT_REQUIRED
+          - 403 FORBIDDEN
+          - 404 NOT_FOUND
+          - 405 METHOD_NOT_ALLOWED
+          - 406 NOT_ACCEPTABLE
+          - 407 PROXY_AUTHENTICATION_REQUIRED
+          - 408 REQUEST_TIMEOUT
+          - 409 CONFLICT
+          - 410 GONE
+          - 411 LENGTH_REQUIRED
+          - 412 PRECONDITION_FAILED
+          - 413 PAYLOAD_TOO_LARGE
+          - 413 REQUEST_ENTITY_TOO_LARGE
+          - 414 URI_TOO_LONG
+          - 414 REQUEST_URI_TOO_LONG
+          - 415 UNSUPPORTED_MEDIA_TYPE
+          - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+          - 417 EXPECTATION_FAILED
+          - 418 I_AM_A_TEAPOT
+          - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+          - 420 METHOD_FAILURE
+          - 421 DESTINATION_LOCKED
+          - 422 UNPROCESSABLE_ENTITY
+          - 423 LOCKED
+          - 424 FAILED_DEPENDENCY
+          - 425 TOO_EARLY
+          - 426 UPGRADE_REQUIRED
+          - 428 PRECONDITION_REQUIRED
+          - 429 TOO_MANY_REQUESTS
+          - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+          - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+          - 500 INTERNAL_SERVER_ERROR
+          - 501 NOT_IMPLEMENTED
+          - 502 BAD_GATEWAY
+          - 503 SERVICE_UNAVAILABLE
+          - 504 GATEWAY_TIMEOUT
+          - 505 HTTP_VERSION_NOT_SUPPORTED
+          - 506 VARIANT_ALSO_NEGOTIATES
+          - 507 INSUFFICIENT_STORAGE
+          - 508 LOOP_DETECTED
+          - 509 BANDWIDTH_LIMIT_EXCEEDED
+          - 510 NOT_EXTENDED
+          - 511 NETWORK_AUTHENTICATION_REQUIRED
+        messages:
+          type: array
+          description: error messages
+          items:
+            type: string
+            description: error messages
+      description: response error
+    Page:
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          description: page number
+          format: int64
+        pageSize:
+          type: integer
+          description: page size
+          format: int64
+        totalRecords:
+          type: integer
+          description: total records
+          format: int64
+        totalPages:
+          type: integer
+          description: total pages
+          format: int64
+      description: response pagination information
+    ResponseEnvelope:
+      type: object
+      properties:
+        data:
+          type: object
+          description: response data
+        errorInfo:
+          $ref: "#/components/schemas/Error"
+        page:
+          $ref: "#/components/schemas/Page"
+    UserCreateUpdateDto:
+      required:
+      - email
+      - firstName
+      - lastName
+      - userName
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: first name of user
+        lastName:
+          type: string
+          description: last name of user
+        email:
+          type: string
+          description: email of user
+        userName:
+          type: string
+          description: user name of user
+    UserQueryDto:
+      required:
+      - page
+      - size
+      type: object
+      properties:
+        id:
+          type: integer
+          description: user id
+          format: int64
+        firstName:
+          type: string
+          description: user first name
+        lastName:
+          type: string
+          description: user last name
+        email:
+          type: string
+          description: user email
+        page:
+          minimum: 0
+          type: integer
+          description: page number
+          format: int32
+        size:
+          maximum: 50
+          minimum: 1
+          type: integer
+          description: page size
+          format: int32
