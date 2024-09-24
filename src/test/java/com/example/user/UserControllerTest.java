@@ -48,7 +48,7 @@ class UserControllerTest {
                         "john"
                 ));
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/users",
+                "http://localhost:" + port + "/api/v1/users",
                 HttpMethod.POST,
                 new HttpEntity<>(new UserCreateUpdateDto(
                         "John",
@@ -67,7 +67,7 @@ class UserControllerTest {
         Mockito.when(userService.register(any()))
                .thenThrow(new IllegalArgumentException("Email already exists."));
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/users",
+                "http://localhost:" + port + "/api/v1/users",
                 HttpMethod.POST,
                 new HttpEntity<>(new UserCreateUpdateDto(
                         "John",
@@ -92,7 +92,7 @@ class UserControllerTest {
                         "john"
                 ));
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/users/1",
+                "http://localhost:" + port + "/api/v1/users/1",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<ResponseEnvelope<UserDto>>() {}
@@ -111,7 +111,7 @@ class UserControllerTest {
         Mockito.when(userService.findUserById(1L))
                .thenThrow(new EntityNotFoundException("User not found."));
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/users/1",
+                "http://localhost:" + port + "/api/v1/users/1",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<ResponseEnvelope<UserDto>>() {}
@@ -130,7 +130,7 @@ class UserControllerTest {
                         "john"
                 ));
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/users/1",
+                "http://localhost:" + port + "/api/v1/users/1",
                 HttpMethod.PUT,
                 new HttpEntity<>(new UserCreateUpdateDto(
                         "John",
@@ -149,7 +149,7 @@ class UserControllerTest {
         Mockito.when(userService.updateUser(any(), any()))
                 .thenThrow(new IllegalArgumentException("User already exists with given email/username."));
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/users/1",
+                "http://localhost:" + port + "/api/v1/users/1",
                 HttpMethod.PUT,
                 new HttpEntity<>(new UserCreateUpdateDto(
                         "John",
@@ -180,7 +180,7 @@ class UserControllerTest {
                        null
                 ));
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/users?page=0&size=10",
+                "http://localhost:" + port + "/api/v1/users?page=0&size=10",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<ResponseEnvelope<List<UserDto>>>() {

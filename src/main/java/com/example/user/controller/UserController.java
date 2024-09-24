@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @Validated
 public class UserController {
     private final UserService userService;
@@ -54,7 +54,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
             }
     )
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseEnvelope<UserDto>> getUserById(@PathVariable Long id) {
         return new ResponseEntity<>(new ResponseEnvelope<>(userService.findUserById(id), null, null),
                 HttpStatus.OK);
@@ -87,7 +87,7 @@ public class UserController {
             }
 
     )
-    @PutMapping(value = "/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseEnvelope<UserDto>> updateUser(@PathVariable Long id,
                                                                 @RequestBody @Valid UserCreateUpdateDto user) {
         return new ResponseEntity<>(
