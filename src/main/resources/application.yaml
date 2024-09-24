@@ -5,3 +5,14 @@ spring:
     generate-ddl: true
 server:
   port: {HOST_PORT}
+logging:
+  level:
+    root: WARN
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health
