@@ -30,20 +30,28 @@ public class UserService {
 
     public UserDto register(UserCreateUpdateDto user) {
         try {
-            log.debug("Creating user with username:{}", user.userName());
+            if (log.isDebugEnabled()) {
+                log.debug("Creating user with username:{}", user.userName());
+            }
             var savedUser = repository.saveAndFlush(mapper.toUserEntity(user));
             return mapper.toUserDto(savedUser);
         } catch (DataIntegrityViolationException e) {
-            log.warn("Error:{} while creating user", e.getMessage());
-            throw new IllegalArgumentException("User already exists with given email/username.");
+            if (log.isWarnEnabled()) {
+                log.warn("Error:{} while creating user", e.getMessage());
+            }
+            throw new IllegalArgumentException("User already exists with given email/username.", e);
         }
     }
 
     public ResponseEnvelope<List<UserDto>> findAll(UserQueryDto userQueryDto) {
-        log.debug("Retrieving users with query: {}", userQueryDto);
+        if (log.isDebugEnabled()) {
+            log.debug("Retrieving users with query: {}", userQueryDto);
+        }
         var result = repository.findAll(getExampleUserEntity(userQueryDto),
                 PageRequest.of(userQueryDto.page(), userQueryDto.size()));
-        log.debug("Users successfully retrieved");
+        if (log.isDebugEnabled()) {
+            log.debug("Users successfully retrieved");
+        }
         return new ResponseEnvelope<>(
                 result.stream().map(mapper::toUserDto).toList(),
                 null,
@@ -51,14 +59,20 @@ public class UserService {
     }
 
     public UserDto updateUser(Long id, UserCreateUpdateDto user) {
-        log.debug("Retrieving user with id: {} to update", id);
+        if (log.isDebugEnabled()) {
+            log.debug("Retrieving user with id: {} to update", id);
+        }
         repository.getReferenceById(id);
         try {
-            log.debug("Updating user with id: {}", id);
+            if (log.isDebugEnabled()) {
+                log.debug("Updating user with id: {}", id);
+            }
             return mapper.toUserDto(repository.saveAndFlush(mapper.toUserEntity(user, id)));
         } catch (DataIntegrityViolationException e) {
-            log.warn("Error:{} while updating user", e.getMessage());
-            throw new IllegalArgumentException("User already exists with given email/username.");
+            if (log.isWarnEnabled()) {
+                log.warn("Error:{} while updating user", e.getMessage());
+            }
+            throw new IllegalArgumentException("User already exists with given email/username.", e);
         }
     }
 
@@ -73,7 +87,9 @@ public class UserService {
     }
 
     public UserDto findUserById(Long id) {
-        log.debug("Retrieving user with id: {}", id);
+        if (log.isDebugEnabled()) {
+            log.debug("Retrieving user with id: {}", id);
+        }
         return mapper.toUserDto(repository.getReferenceById(id));
     }
 }

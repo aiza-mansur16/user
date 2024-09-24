@@ -62,6 +62,10 @@
             <version>2.5.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -103,6 +107,27 @@
                             <version>0.2.0</version>
                         </path>
                     </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.25.0</version>
+                <configuration>
+                    <inputEncoding>utf-8</inputEncoding>
+                    <minimumTokens>100</minimumTokens>
+                    <targetJdk>17</targetJdk>
+                    <excludes>
+                        <exclude>**/*Bean.java</exclude>
+                        <exclude>**/generated/*.java</exclude>
+                    </excludes>
+                    <excludeRoots>
+                        <excludeRoot>target/generated-sources/stubs</excludeRoot>
+                    </excludeRoots>
+                    <rulesets>
+                        <ruleset>rulesets/java/quickstart.xml</ruleset>
+                    </rulesets>
                 </configuration>
             </plugin>
 

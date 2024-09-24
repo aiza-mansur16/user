@@ -31,7 +31,7 @@ public class RestControllerAdvice {
         error.setStatusCode(HttpStatus.BAD_REQUEST);
 
         var errorMessages = exception.getBindingResult().getFieldErrors().stream().filter(Objects::nonNull)
-                .map(m -> (m.getField() + " " + m.getDefaultMessage())).toList();
+                .map(m -> m.getField() + " " + m.getDefaultMessage()).toList();
         error.setMessages(errorMessages);
         return new ResponseEntity<>(new ResponseEnvelope<>(null, error, null), HttpStatus.BAD_REQUEST);
     }
