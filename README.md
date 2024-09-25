@@ -29,10 +29,13 @@ This will generate the documentation at path:
 src\main\resources\openapi\user-specification.yaml
 ```
 
-### Postman Collection ###
+## Postman Collection ##
+Postman collection for user service can be found at:
+```
+src\main\resources\postman\user-postman-collection.json
+```
+
 To run the APIs in collection add in global environment the following variable value
 ```
 USER_PORT -> port on which user service is running
 ```
-[Link](https://api.postman.com/collections/38535958-17c00946-6806-4c6b-b522-273efee4778b?access_key=PMAT-01J8FWRBME4NGRJ9J8NAVDHQJG)
-to the collection.
