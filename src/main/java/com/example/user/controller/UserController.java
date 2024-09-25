@@ -13,7 +13,13 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,78 +27,78 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 @Validated
 public class UserController {
-    private final UserService userService;
+  private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
-    @Operation(
-            summary = "Create a new user",
-            description = "Create a new user",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "User created successfully",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid Request",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
-            }
-    )
-    @PostMapping
-    public ResponseEntity<ResponseEnvelope<UserDto>> createUser(@RequestBody @Valid UserCreateUpdateDto user) {
-        return new ResponseEntity<>(
-                new ResponseEnvelope<>(userService.register(user), null, null),
-                HttpStatus.CREATED);
-    }
+  @Operation(
+      summary = "Create a new user",
+      description = "Create a new user",
+      responses = {
+          @ApiResponse(responseCode = "201", description = "User created successfully",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
+          @ApiResponse(responseCode = "400", description = "Invalid Request",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
+      }
+  )
+  @PostMapping
+  public ResponseEntity<ResponseEnvelope<UserDto>> createUser(@RequestBody @Valid UserCreateUpdateDto user) {
+    return new ResponseEntity<>(
+        new ResponseEnvelope<>(userService.register(user), null, null),
+        HttpStatus.CREATED);
+  }
 
-    @Operation(
-            summary = "Get user by ID",
-            description = "Get user by ID",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "User found successfully",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
-                    @ApiResponse(responseCode = "404", description = "User not found",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
-            }
-    )
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseEnvelope<UserDto>> getUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(new ResponseEnvelope<>(userService.findUserById(id), null, null),
-                HttpStatus.OK);
-    }
+  @Operation(
+      summary = "Get user by ID",
+      description = "Get user by ID",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "User found successfully",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
+          @ApiResponse(responseCode = "404", description = "User not found",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
+      }
+  )
+  @GetMapping("/{id}")
+  public ResponseEntity<ResponseEnvelope<UserDto>> getUserById(@PathVariable Long id) {
+    return new ResponseEntity<>(new ResponseEnvelope<>(userService.findUserById(id), null, null),
+        HttpStatus.OK);
+  }
 
-    @Operation(
-            summary = "Get all users",
-            description = "Get all users",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Users found successfully",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
-            }
-    )
-    @GetMapping
-    public ResponseEntity<ResponseEnvelope<List<UserDto>>> getAllUsers(@Valid UserQueryDto userQueryDto) {
-        return new ResponseEntity<>(userService.findAll(userQueryDto),
-                HttpStatus.OK);
-    }
+  @Operation(
+      summary = "Get all users",
+      description = "Get all users",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "Users found successfully",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
+      }
+  )
+  @GetMapping
+  public ResponseEntity<ResponseEnvelope<List<UserDto>>> getAllUsers(@Valid UserQueryDto userQueryDto) {
+    return new ResponseEntity<>(userService.findAll(userQueryDto),
+        HttpStatus.OK);
+  }
 
-    @Operation(
-            summary = "Update user by ID",
-            description = "Update user by ID",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "User updated successfully",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
-                    @ApiResponse(responseCode = "404", description = "User not found",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid Request",
-                            content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
-            }
+  @Operation(
+      summary = "Update user by ID",
+      description = "Update user by ID",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "User updated successfully",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
+          @ApiResponse(responseCode = "404", description = "User not found",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class))),
+          @ApiResponse(responseCode = "400", description = "Invalid Request",
+              content = @Content(schema = @Schema(implementation = ResponseEnvelope.class)))
+      }
 
-    )
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponseEnvelope<UserDto>> updateUser(@PathVariable Long id,
-                                                                @RequestBody @Valid UserCreateUpdateDto user) {
-        return new ResponseEntity<>(
-                new ResponseEnvelope<>(userService.updateUser(id, user), null, null),
-                HttpStatus.OK);
-    }
+  )
+  @PutMapping("/{id}")
+  public ResponseEntity<ResponseEnvelope<UserDto>> updateUser(@PathVariable Long id,
+                                                              @RequestBody @Valid UserCreateUpdateDto user) {
+    return new ResponseEntity<>(
+        new ResponseEnvelope<>(userService.updateUser(id, user), null, null),
+        HttpStatus.OK);
+  }
 
 }
