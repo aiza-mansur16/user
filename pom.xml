@@ -69,12 +69,6 @@
 
         <dependency>
             <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-maven-plugin</artifactId>
-            <version>4.8.6.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
             <version>4.5.3</version>
             <scope>compile</scope>
@@ -136,12 +130,19 @@
                         <exclude>**/generated/*.java</exclude>
                     </excludes>
                     <excludeRoots>
-                        <excludeRoot>target/generated-sources/stubs</excludeRoot>
+                        <excludeRoot>target/generated-sources</excludeRoot>
                     </excludeRoots>
                     <rulesets>
                         <ruleset>rulesets/java/quickstart.xml</ruleset>
                     </rulesets>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -166,7 +167,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.5.0</version> <!-- Use the latest version -->
+                <version>3.5.0</version>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
