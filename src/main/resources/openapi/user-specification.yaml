@@ -3,10 +3,10 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:58435
+- url: http://localhost:65512
   description: Generated server url
 paths:
-  /api/users/{id}:
+  /api/v1/users/{id}:
     get:
       tags:
       - user-controller
@@ -71,7 +71,7 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ResponseEnvelope"
-  /api/users:
+  /api/v1/users:
     get:
       tags:
       - user-controller

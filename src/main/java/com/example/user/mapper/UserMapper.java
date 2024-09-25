@@ -8,10 +8,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserDto toUserDto(UserEntity user);
+  UserDto toUserDto(UserEntity user);
 
-    @Mapping(ignore = true, target = "id")
-    UserEntity toUserEntity(UserCreateUpdateDto user);
+  @Mapping(ignore = true, target = "id")
+  UserEntity toUserEntity(UserCreateUpdateDto user);
 
-    UserEntity toUserEntity(UserCreateUpdateDto user, Long id);
+  UserEntity toUserEntity(UserCreateUpdateDto user, Long id);
 }

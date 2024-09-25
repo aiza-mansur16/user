@@ -20,60 +20,76 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private final UserRepository repository;
-    private final UserMapper mapper;
+  private final UserRepository repository;
+  private final UserMapper mapper;
 
-    public UserService(UserRepository repository, UserMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
+  public UserService(UserRepository repository, UserMapper mapper) {
+    this.repository = repository;
+    this.mapper = mapper;
+  }
 
-    public UserDto register(UserCreateUpdateDto user) {
-        try {
-            log.debug("Creating user with username:{}", user.userName());
-            var savedUser = repository.saveAndFlush(mapper.toUserEntity(user));
-            return mapper.toUserDto(savedUser);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Error:{} while creating user", e.getMessage());
-            throw new IllegalArgumentException("User already exists with given email/username.");
-        }
+  public UserDto register(UserCreateUpdateDto user) {
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("Creating user with username:{}", user.userName());
+      }
+      var savedUser = repository.saveAndFlush(mapper.toUserEntity(user));
+      return mapper.toUserDto(savedUser);
+    } catch (DataIntegrityViolationException e) {
+      if (log.isWarnEnabled()) {
+        log.warn("Error:{} while creating user", e.getMessage());
+      }
+      throw new IllegalArgumentException("User already exists with given email/username.", e);
     }
+  }
 
-    public ResponseEnvelope<List<UserDto>> findAll(UserQueryDto userQueryDto) {
-        log.debug("Retrieving users with query: {}", userQueryDto);
-        var result = repository.findAll(getExampleUserEntity(userQueryDto),
-                PageRequest.of(userQueryDto.page(), userQueryDto.size()));
-        log.debug("Users successfully retrieved");
-        return new ResponseEnvelope<>(
-                result.stream().map(mapper::toUserDto).toList(),
-                null,
-                new Page(userQueryDto.page(), userQueryDto.size(), result.getTotalElements(), result.getTotalPages()));
+  public ResponseEnvelope<List<UserDto>> findAll(UserQueryDto userQueryDto) {
+    if (log.isDebugEnabled()) {
+      log.debug("Retrieving users with query: {}", userQueryDto);
     }
+    var result = repository.findAll(getExampleUserEntity(userQueryDto),
+        PageRequest.of(userQueryDto.page(), userQueryDto.size()));
+    if (log.isDebugEnabled()) {
+      log.debug("Users successfully retrieved");
+    }
+    return new ResponseEnvelope<>(
+        result.stream().map(mapper::toUserDto).toList(),
+        null,
+        new Page(userQueryDto.page(), userQueryDto.size(), result.getTotalElements(), result.getTotalPages()));
+  }
 
-    public UserDto updateUser(Long id, UserCreateUpdateDto user) {
-        log.debug("Retrieving user with id: {} to update", id);
-        repository.getReferenceById(id);
-        try {
-            log.debug("Updating user with id: {}", id);
-            return mapper.toUserDto(repository.saveAndFlush(mapper.toUserEntity(user, id)));
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Error:{} while updating user", e.getMessage());
-            throw new IllegalArgumentException("User already exists with given email/username.");
-        }
+  public UserDto updateUser(Long id, UserCreateUpdateDto user) {
+    if (log.isDebugEnabled()) {
+      log.debug("Retrieving user with id: {} to update", id);
     }
+    repository.getReferenceById(id);
+    try {
+      if (log.isDebugEnabled()) {
+        log.debug("Updating user with id: {}", id);
+      }
+      return mapper.toUserDto(repository.saveAndFlush(mapper.toUserEntity(user, id)));
+    } catch (DataIntegrityViolationException e) {
+      if (log.isWarnEnabled()) {
+        log.warn("Error:{} while updating user", e.getMessage());
+      }
+      throw new IllegalArgumentException("User already exists with given email/username.", e);
+    }
+  }
 
-    private Example<UserEntity> getExampleUserEntity(UserQueryDto userQueryDto) {
-        return Example.of(UserEntity
-                .builder()
-                .id(userQueryDto.id())
-                .email(userQueryDto.email())
-                .firstName(userQueryDto.firstName())
-                .lastName(userQueryDto.lastName())
-                .build());
-    }
+  private Example<UserEntity> getExampleUserEntity(UserQueryDto userQueryDto) {
+    return Example.of(UserEntity
+        .builder()
+        .id(userQueryDto.id())
+        .email(userQueryDto.email())
+        .firstName(userQueryDto.firstName())
+        .lastName(userQueryDto.lastName())
+        .build());
+  }
 
-    public UserDto findUserById(Long id) {
-        log.debug("Retrieving user with id: {}", id);
-        return mapper.toUserDto(repository.getReferenceById(id));
+  public UserDto findUserById(Long id) {
+    if (log.isDebugEnabled()) {
+      log.debug("Retrieving user with id: {}", id);
     }
+    return mapper.toUserDto(repository.getReferenceById(id));
+  }
 }
